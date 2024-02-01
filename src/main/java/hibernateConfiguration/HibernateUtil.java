@@ -9,6 +9,10 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 import org.hibernate.service.ServiceRegistry;
 
+import model.Casilla;
+import model.Fitxa;
+import model.Jugador;
+import model.Partida;
 import model.Vehicle;
 
 public class HibernateUtil {
@@ -36,7 +40,11 @@ public class HibernateUtil {
 
                 settings.put("hibernate.connection.serverTimezone", "UTC");
 
-                configuration.addAnnotatedClass(Vehicle.class);
+                configuration.addAnnotatedClass(Jugador.class);
+                configuration.addAnnotatedClass(Partida.class);
+                configuration.addAnnotatedClass(Casilla.class);
+                configuration.addAnnotatedClass(Fitxa.class);
+                
                 configuration.setProperties(settings);
 
                 ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()

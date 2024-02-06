@@ -44,10 +44,7 @@ public class HibernateUtil {
                 configuration.addAnnotatedClass(Partida.class);
                 configuration.addAnnotatedClass(Fitxa.class);
                 configuration.addAnnotatedClass(Jugador.class);
-                
-                
-                
-                
+              
                 configuration.setProperties(settings);
 
                 ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()

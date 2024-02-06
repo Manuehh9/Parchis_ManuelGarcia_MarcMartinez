@@ -26,26 +26,39 @@ public class Partida {
     @ManyToOne
     @JoinColumn(name = "IdGanador")
     private Jugador ganador;
+    
+    @ManyToOne
+    @JoinColumn(name = "jugador_id")
+    private Jugador jugador;
 
-    @OneToMany(mappedBy = "partida")
+    @OneToMany(mappedBy = "partida", cascade = CascadeType.ALL)
     private List<Casilla> casillas;
 
-    @OneToMany(mappedBy = "partida")
+    @OneToMany(mappedBy = "partida", cascade = CascadeType.ALL)
     private List<Fitxa> fitxes;
+    
+    @OneToMany(mappedBy = "partida", cascade = CascadeType.ALL)
+    private List<Jugador> jugadores;
 
-	public Partida(Date fechaInicio, Date fechaFin, boolean enCurso, Jugador ganador,
-			List<Casilla> casillas, List<Fitxa> fitxes) {
+	public Partida(Long idPartida, Date fechaInicio, Date fechaFin, boolean enCurso, Jugador ganador,
+			List<Casilla> casillas, List<Fitxa> fitxes, List<Jugador> jugadores) {
 		super();
+		this.idPartida = idPartida;
 		this.fechaInicio = fechaInicio;
 		this.fechaFin = fechaFin;
 		this.enCurso = enCurso;
 		this.ganador = ganador;
 		this.casillas = casillas;
 		this.fitxes = fitxes;
+		this.jugadores = jugadores;
 	}
 
 	public Long getIdPartida() {
 		return idPartida;
+	}
+
+	public void setIdPartida(Long idPartida) {
+		this.idPartida = idPartida;
 	}
 
 	public Date getFechaInicio() {
@@ -96,10 +109,18 @@ public class Partida {
 		this.fitxes = fitxes;
 	}
 
+	public List<Jugador> getJugadores() {
+		return jugadores;
+	}
+
+	public void setJugadores(List<Jugador> jugadores) {
+		this.jugadores = jugadores;
+	}
+
 	@Override
 	public String toString() {
 		return "Partida [idPartida=" + idPartida + ", fechaInicio=" + fechaInicio + ", fechaFin=" + fechaFin
 				+ ", enCurso=" + enCurso + ", ganador=" + ganador + ", casillas=" + casillas + ", fitxes=" + fitxes
-				+ "]";
+				+ ", jugadores=" + jugadores + "]";
 	}
 }

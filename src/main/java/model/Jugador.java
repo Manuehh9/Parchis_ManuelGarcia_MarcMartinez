@@ -3,16 +3,15 @@ package model;
 import java.util.List;
 
 import javax.persistence.*;
-
 @Entity
 public class Jugador {
 
-	@Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "IdJugador")
-    private Long idJugador;
-	
-	@Column(name = "Nom")
+    private Long jugador_id;
+
+    @Column(name = "Nom")
     private String nom;
 
     @Column(name = "Color")
@@ -20,27 +19,37 @@ public class Jugador {
 
     @Column(name = "Victories")
     private int victories;
+
+    @ManyToOne
+    @JoinColumn(name = "partida_id")
+    private Partida partida;
     
     @OneToMany(mappedBy = "jugador")
     private List<Partida> partides;
-    
+
     @OneToMany(mappedBy = "jugador")
     private List<Fitxa> fitxes;
 
-	public Jugador(String nom, String color, int victories, List<Partida> partides,
+	public Jugador(Long jugador_id, String nom, String color, int victories, Partida partida, List<Partida> partides,
 			List<Fitxa> fitxes) {
 		super();
+		this.jugador_id = jugador_id;
 		this.nom = nom;
 		this.color = color;
 		this.victories = victories;
+		this.partida = partida;
 		this.partides = partides;
 		this.fitxes = fitxes;
 	}
 
 	public Long getIdJugador() {
-		return idJugador;
+		return jugador_id;
 	}
-	
+
+	public void setIdJugador(Long jugador_id) {
+		this.jugador_id = jugador_id;
+	}
+
 	public String getNom() {
 		return nom;
 	}
@@ -65,6 +74,14 @@ public class Jugador {
 		this.victories = victories;
 	}
 
+	public Partida getPartida() {
+		return partida;
+	}
+
+	public void setPartida(Partida partida) {
+		this.partida = partida;
+	}
+
 	public List<Partida> getPartides() {
 		return partides;
 	}
@@ -83,7 +100,7 @@ public class Jugador {
 
 	@Override
 	public String toString() {
-		return "Jugadors [idJugador=" + idJugador + ", nom=" + nom + ", color=" + color + ", victories=" + victories
-				+ ", partides=" + partides + ", fitxes=" + fitxes + "]";
+		return "Jugador [idJugador=" + jugador_id + ", nom=" + nom + ", color=" + color + ", victories=" + victories
+				+ ", partida=" + partida + ", partides=" + partides + ", fitxes=" + fitxes + "]";
 	}
 }

@@ -1,14 +1,15 @@
 package model;
 
 import javax.persistence.*;
-
 @Entity
-@Table(name = "Casillas")
+@Table(name = "Casillas")  // Cambiado de "Casillas" a "Casillas"
 public class Casilla {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "IdCasilla")
     private Long idCasilla;
+
 
     @Column(name = "TipoCasilla")
     private String tipoCasilla;

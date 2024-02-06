@@ -13,7 +13,6 @@ import model.Casilla;
 import model.Fitxa;
 import model.Jugador;
 import model.Partida;
-import model.Vehicle;
 
 public class HibernateUtil {
 	
@@ -26,7 +25,7 @@ public class HibernateUtil {
                 Properties settings = new Properties();
                 
                 settings.put(Environment.DRIVER, "com.mysql.cj.jdbc.Driver");
-                settings.put(Environment.URL, "jdbc:mysql://localhost:3306/ParchisManuelMarc");
+                settings.put(Environment.URL, "jdbc:mysql://localhost:3306/parchismanuelmarc");
                 settings.put(Environment.USER, "root");
                 settings.put(Environment.PASS, "1234");
 
@@ -34,7 +33,8 @@ public class HibernateUtil {
 
                 settings.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
 
-                settings.put(Environment.HBM2DDL_AUTO, "update");
+                
+                settings.put(Environment.HBM2DDL_AUTO, "validate");
 
                 settings.put(Environment.DIALECT, "org.hibernate.dialect.MySQL57Dialect");
 
@@ -58,5 +58,4 @@ public class HibernateUtil {
         }
         return entityManagerFactory;
     }
-
 }

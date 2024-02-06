@@ -3,12 +3,14 @@ package model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Fitxes")
+@Table(name = "Fichas")  // Cambiado de "Fichas" a "Fichas"
 public class Fitxa {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "IdFitxa")
     private Long idFitxa;
+
 
     @Column(name = "Posicion")
     private int posicion;

@@ -9,7 +9,7 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 import org.hibernate.service.ServiceRegistry;
 
-import model.Casilla;
+import model.Casella;
 import model.Fitxa;
 import model.Jugador;
 import model.Partida;
@@ -34,16 +34,19 @@ public class HibernateUtil {
                 settings.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
 
                 
-                settings.put(Environment.HBM2DDL_AUTO, "validate");
+                settings.put(Environment.HBM2DDL_AUTO, "update");
 
                 settings.put(Environment.DIALECT, "org.hibernate.dialect.MySQL57Dialect");
 
                 settings.put("hibernate.connection.serverTimezone", "UTC");
-
-                configuration.addAnnotatedClass(Jugador.class);
+                
+                configuration.addAnnotatedClass(Casella.class);
                 configuration.addAnnotatedClass(Partida.class);
-                configuration.addAnnotatedClass(Casilla.class);
                 configuration.addAnnotatedClass(Fitxa.class);
+                configuration.addAnnotatedClass(Jugador.class);
+                
+                
+                
                 
                 configuration.setProperties(settings);
 

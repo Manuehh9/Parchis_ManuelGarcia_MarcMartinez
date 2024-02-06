@@ -6,99 +6,99 @@ import java.util.List;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Partides")
+@Table(name = "Partida")
 public class Partida {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "IdPartida")
-    private Long idPartida;
+    private Long IdPartida;
 
-    @Column(name = "FechaInicio")
-    private Date fechaInicio;
+    @Column(name = "DataInici")
+    private Date DataInici;
 
-    @Column(name = "FechaFin")
-    private Date fechaFin;
+    @Column(name = "DataFi")
+    private Date DataFi;
 
-    @Column(name = "EnCurso")
-    private boolean enCurso;
+    @Column(name = "EnCurs")
+    private boolean EnCurs;
 
     @ManyToOne
-    @JoinColumn(name = "IdGanador")
-    private Jugador ganador;
+    @JoinColumn(name = "IdGuanyador")
+    private Jugador IdGuanyador;
     
     @ManyToOne
     @JoinColumn(name = "jugador_id")
-    private Jugador jugador;
+    private Jugador jugador_id;
 
-    @OneToMany(mappedBy = "partida", cascade = CascadeType.ALL)
-    private List<Casilla> casillas;
+    @OneToMany(mappedBy = "idCasella", cascade = CascadeType.ALL)
+    private List<Casella> casellas;
 
-    @OneToMany(mappedBy = "partida", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "IdFitxa", cascade = CascadeType.ALL)
     private List<Fitxa> fitxes;
     
-    @OneToMany(mappedBy = "partida", cascade = CascadeType.ALL)
-    private List<Jugador> jugadores;
+    @OneToMany(mappedBy = "IdJugador", cascade = CascadeType.ALL)
+    private List<Jugador> jugadors;
 
 	public Partida(Long idPartida, Date fechaInicio, Date fechaFin, boolean enCurso, Jugador ganador,
-			List<Casilla> casillas, List<Fitxa> fitxes, List<Jugador> jugadores) {
+			List<Casella> casillas, List<Fitxa> fitxes, List<Jugador> jugadores) {
 		super();
-		this.idPartida = idPartida;
-		this.fechaInicio = fechaInicio;
-		this.fechaFin = fechaFin;
-		this.enCurso = enCurso;
-		this.ganador = ganador;
-		this.casillas = casillas;
+		this.IdPartida = idPartida;
+		this.DataInici = fechaInicio;
+		this.DataFi = fechaFin;
+		this.EnCurs = enCurso;
+		this.IdGuanyador = ganador;
+		this.casellas = casillas;
 		this.fitxes = fitxes;
-		this.jugadores = jugadores;
+		this.jugadors = jugadores;
 	}
 
 	public Long getIdPartida() {
-		return idPartida;
+		return IdPartida;
 	}
 
 	public void setIdPartida(Long idPartida) {
-		this.idPartida = idPartida;
+		this.IdPartida = idPartida;
 	}
 
 	public Date getFechaInicio() {
-		return fechaInicio;
+		return DataInici;
 	}
 
 	public void setFechaInicio(Date fechaInicio) {
-		this.fechaInicio = fechaInicio;
+		this.DataInici = fechaInicio;
 	}
 
 	public Date getFechaFin() {
-		return fechaFin;
+		return DataFi;
 	}
 
 	public void setFechaFin(Date fechaFin) {
-		this.fechaFin = fechaFin;
+		this.DataFi = fechaFin;
 	}
 
 	public boolean isEnCurso() {
-		return enCurso;
+		return EnCurs;
 	}
 
 	public void setEnCurso(boolean enCurso) {
-		this.enCurso = enCurso;
+		this.EnCurs = enCurso;
 	}
 
 	public Jugador getGanador() {
-		return ganador;
+		return IdGuanyador;
 	}
 
 	public void setGanador(Jugador ganador) {
-		this.ganador = ganador;
+		this.IdGuanyador = ganador;
 	}
 
-	public List<Casilla> getCasillas() {
-		return casillas;
+	public List<Casella> getCasillas() {
+		return casellas;
 	}
 
-	public void setCasillas(List<Casilla> casillas) {
-		this.casillas = casillas;
+	public void setCasillas(List<Casella> casillas) {
+		this.casellas = casillas;
 	}
 
 	public List<Fitxa> getFitxes() {
@@ -110,17 +110,17 @@ public class Partida {
 	}
 
 	public List<Jugador> getJugadores() {
-		return jugadores;
+		return jugadors;
 	}
 
 	public void setJugadores(List<Jugador> jugadores) {
-		this.jugadores = jugadores;
+		this.jugadors = jugadores;
 	}
 
 	@Override
 	public String toString() {
-		return "Partida [idPartida=" + idPartida + ", fechaInicio=" + fechaInicio + ", fechaFin=" + fechaFin
-				+ ", enCurso=" + enCurso + ", ganador=" + ganador + ", casillas=" + casillas + ", fitxes=" + fitxes
-				+ ", jugadores=" + jugadores + "]";
+		return "Partida [IdPartida=" + IdPartida + ", DataInici=" + DataInici + ", DataFi=" + DataFi
+				+ ", EnCurs=" + EnCurs + ", IdGuanyador=" + IdGuanyador + ", casellas=" + casellas + ", fitxes=" + fitxes
+				+ ", jugadors=" + jugadors + "]";
 	}
 }

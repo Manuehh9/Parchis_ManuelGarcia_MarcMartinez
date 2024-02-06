@@ -9,45 +9,45 @@ public class Jugador {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "IdJugador")
-    private Long jugador_id;
+    private Long IdJugador;
 
-    @Column(name = "Nom")
+    @Column(name = "nom")
     private String nom;
 
-    @Column(name = "Color")
+    @Column(name = "color")
     private String color;
 
-    @Column(name = "Victories")
+    @Column(name = "victories")
     private int victories;
 
     @ManyToOne
     @JoinColumn(name = "partida_id")
-    private Partida partida;
+    private Partida partida_id;
     
-    @OneToMany(mappedBy = "jugador")
+    @OneToMany(mappedBy = "IdPartida")
     private List<Partida> partides;
 
-    @OneToMany(mappedBy = "jugador")
+    @OneToMany(mappedBy = "IdFitxa")
     private List<Fitxa> fitxes;
 
 	public Jugador(Long jugador_id, String nom, String color, int victories, Partida partida, List<Partida> partides,
 			List<Fitxa> fitxes) {
 		super();
-		this.jugador_id = jugador_id;
+		this.IdJugador = jugador_id;
 		this.nom = nom;
 		this.color = color;
 		this.victories = victories;
-		this.partida = partida;
+		this.partida_id = partida;
 		this.partides = partides;
 		this.fitxes = fitxes;
 	}
 
 	public Long getIdJugador() {
-		return jugador_id;
+		return IdJugador;
 	}
 
 	public void setIdJugador(Long jugador_id) {
-		this.jugador_id = jugador_id;
+		this.IdJugador = jugador_id;
 	}
 
 	public String getNom() {
@@ -75,11 +75,11 @@ public class Jugador {
 	}
 
 	public Partida getPartida() {
-		return partida;
+		return partida_id;
 	}
 
 	public void setPartida(Partida partida) {
-		this.partida = partida;
+		this.partida_id = partida;
 	}
 
 	public List<Partida> getPartides() {
@@ -100,7 +100,7 @@ public class Jugador {
 
 	@Override
 	public String toString() {
-		return "Jugador [idJugador=" + jugador_id + ", nom=" + nom + ", color=" + color + ", victories=" + victories
-				+ ", partida=" + partida + ", partides=" + partides + ", fitxes=" + fitxes + "]";
+		return "Jugador [IdJugador=" + IdJugador + ", nom=" + nom + ", color=" + color + ", victories=" + victories
+				+ ", partida_id=" + partida_id + ", partides=" + partides + ", fitxes=" + fitxes + "]";
 	}
 }

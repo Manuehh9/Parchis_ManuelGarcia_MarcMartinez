@@ -29,6 +29,10 @@ public class Casella {
 		this.IdPartida = partida;
 	}
 	
+	public Casella() {
+		
+	}
+
 	public Long getIdCasilla() {
 		return idCasella;
 	}

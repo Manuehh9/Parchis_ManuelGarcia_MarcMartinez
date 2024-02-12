@@ -40,6 +40,10 @@ public class Partida {
     @OneToMany(mappedBy = "IdJugador", cascade = CascadeType.ALL)
     private List<Jugador> jugadors;
 
+    public Partida() {
+		super();
+	}
+    
 	public Partida(Long idPartida, Date fechaInicio, Date fechaFin, boolean enCurso, Jugador ganador,
 			List<Casella> casillas, List<Fitxa> fitxes, List<Jugador> jugadores) {
 		super();

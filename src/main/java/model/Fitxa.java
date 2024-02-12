@@ -11,7 +11,6 @@ public class Fitxa {
     @Column(name = "IdFitxa")
     private Long IdFitxa;
 
-
     @Column(name = "posicio")
     private int posicio;
 
@@ -33,6 +32,10 @@ public class Fitxa {
 		this.activa = activa;
 		this.IdJugador = jugador;
 		this.IdPartida = partida;
+	}
+
+	public Fitxa() {
+		// TODO Auto-generated constructor stub
 	}
 
 	public Long getIdFitxa() {

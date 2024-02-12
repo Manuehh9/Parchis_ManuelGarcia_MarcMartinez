@@ -30,16 +30,20 @@ public class Jugador {
     @OneToMany(mappedBy = "IdFitxa")
     private List<Fitxa> fitxes;
 
-	public Jugador(Long jugador_id, String nom, String color, int victories, Partida partida, List<Partida> partides,
+	public Jugador(String nom, String color, int victories, Partida partida, List<Partida> partides,
 			List<Fitxa> fitxes) {
 		super();
-		this.IdJugador = jugador_id;
 		this.nom = nom;
 		this.color = color;
 		this.victories = victories;
 		this.partida_id = partida;
 		this.partides = partides;
 		this.fitxes = fitxes;
+	}
+
+	public Jugador(String nom, String color) {
+		this.nom = nom;
+		this.color = color;
 	}
 
 	public Long getIdJugador() {

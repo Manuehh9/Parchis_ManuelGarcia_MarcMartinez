@@ -2,6 +2,7 @@ package dao;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -15,11 +16,17 @@ import model.Jugador;
 import model.Partida;
 
 public class PartidaDAOImpl implements PartidaDAO{
+	
+	private List<Jugador> jugadores;
+	private EntityTransaction transaction;
+	private EntityManager entityManager;
+	private Long IdGanador;
+	private HibernateUtil hu = new HibernateUtil();
 
 	@Override
 	public void iniciarPartida() {
-	    EntityManager entityManager = HibernateUtil.getEntityManagerFactory().createEntityManager();
-	    EntityTransaction transaction = null;
+	    entityManager = hu.getEntityManagerFactory().createEntityManager();
+	    transaction = null;
 
 	    try {
 	        // Iniciar una transacción
@@ -80,6 +87,18 @@ public class PartidaDAOImpl implements PartidaDAO{
 	        // Cerrar el EntityManager
 	        entityManager.close();
 	    }
+	    
+	    do {
+			for(int i = 0; i < jugadores.size(); i++) {
+				int numFitxa = Turno(jugadores.get(i));
+				Fitxa f = jugadores.get(i).getFitxes().get(numFitxa);
+				moureFitxa(f, llancarDaus());
+			}
+		} while (verificarVictoria());
+	    
+	    System.out.println("Guanyador: " + IdGanador);
+	    
+	    hu.closeEntityManagerFactory();
 	}
  
 
@@ -115,11 +134,11 @@ public class PartidaDAOImpl implements PartidaDAO{
 	    // o bien, podrías tener una lista predefinida de jugadores
 	    
 	    // Supongamos que tenemos jugadores predefinidos para este ejemplo
-	    List<Jugador> jugadores = new ArrayList<>();
-	    jugadores.add(new Jugador("Jugador1", "Rojo"));
-	    jugadores.add(new Jugador("Jugador2", "Verde"));
-	    jugadores.add(new Jugador("Jugador3", "Azul"));
-	    jugadores.add(new Jugador("Jugador4", "Amarillo"));
+	    jugadores = new ArrayList<>();
+	    jugadores.add(new Jugador("Jugador1", "Rojo", partida));
+	    jugadores.add(new Jugador("Jugador2", "Verde", partida));
+	    jugadores.add(new Jugador("Jugador3", "Azul", partida));
+	    jugadores.add(new Jugador("Jugador4", "Amarillo", partida));
 	    
 	    // Asignar los jugadores a la partida
 	    partida.setJugadores(jugadores);
@@ -130,7 +149,7 @@ public class PartidaDAOImpl implements PartidaDAO{
 	        for (int i = 0; i < 4; i++) {
 	            Fitxa fitxa = new Fitxa();
 	            fitxa.setPosicion(0); // Posición inicial de la ficha
-	            fitxa.setActiva(true); // La ficha está activa al inicio del juego
+	            fitxa.setActiva(false); // La ficha está inactiva al inicio del juego
 	            fitxa.setJugador(jugador); // Asignar el jugador a la ficha
 	            fitxa.setPartida(partida); // Asignar la partida a la ficha
 	            fichas.add(fitxa);
@@ -144,9 +163,15 @@ public class PartidaDAOImpl implements PartidaDAO{
 	public int llancarDaus() {
 		//Creem un random de rang 1-6 i ho guardem en la variable dado
 		Random rand = new Random();
-        int dado = rand.nextInt(6) + 1;
-
-        return dado;
+        int dado1 = rand.nextInt(6) + 1;
+        int dado2 = rand.nextInt(6) + 1;
+        int suma;
+        if(verificarDausIguals(dado1, dado2)) {
+        	suma = 13;
+        } else {
+            suma = dado1 + dado2;
+        }
+        return suma;
 	}
 	
 	public boolean verificarDausIguals(int dado1, int dado2) {
@@ -157,37 +182,74 @@ public class PartidaDAOImpl implements PartidaDAO{
 
 	@Override
 	public void moureFitxa(Fitxa fitxa, int quantitat) {
-		// TODO Auto-generated method stub
+		if(fitxa.isActiva()) {
+			fitxa.setPosicion(fitxa.getPosicion() + quantitat);
+		}
 		
 	}
 
 	@Override
 	public boolean capturarFitxa(Fitxa fitxa) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean comprobar = true;
+		if(verificarCasaSegura(fitxa.getPosicion())) {
+			comprobar = false;
+		}
+		return comprobar;
 	}
 
 	@Override
-	public int entradaAlTaulell(Fitxa fitxa) {
-		// TODO Auto-generated method stub
-		return 0;
+	public boolean entradaAlTaulell(Fitxa fitxa) {
+		boolean comprobar = false;
+		if(!fitxa.isActiva() && llancarDaus() == 13) {
+			fitxa.setActiva(true);
+			comprobar = true;
+		}
+		return comprobar;
 	}
 
 	@Override
 	public boolean verificarCasaSegura(int posicio) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean comprobar = false;
+		if(obtenerTipoCasilla(posicio).equals("Segura")) {
+			comprobar = true;
+		}
+		return comprobar;
 	}
 
 	@Override
 	public boolean finalitzarRecorregut(Fitxa fitxa, int quantitat) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean comprobar = false;
+		if(fitxa.getPosicion() == quantitat) {
+			comprobar = true;
+		}
+		return comprobar;
 	}
 
 	@Override
 	public boolean verificarVictoria() {
-		// TODO Auto-generated method stub
-		return false;
+	    int finalCasilla = 68;
+	    for (Jugador j : jugadores) {
+	        if (finalitzarRecorregut(j.getFitxes().get(0), finalCasilla) &&
+	            finalitzarRecorregut(j.getFitxes().get(1), finalCasilla) &&
+	            finalitzarRecorregut(j.getFitxes().get(2), finalCasilla) &&
+	            finalitzarRecorregut(j.getFitxes().get(3), finalCasilla)) {
+	            IdGanador = j.getIdJugador();
+	            return true;
+	        }
+	    }
+	    return false;
 	}
+	public int Turno(Jugador jugador) {
+		Random rand = new Random();
+		int fitxa = rand.nextInt(3);
+		return fitxa;
+	}
+
+
+	public Long getIdGanador() {
+		return IdGanador;
+	}
+	
+	
+	
 }

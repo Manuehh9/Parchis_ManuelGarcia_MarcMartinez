@@ -41,9 +41,10 @@ public class Jugador {
 		this.fitxes = fitxes;
 	}
 
-	public Jugador(String nom, String color) {
+	public Jugador(String nom, String color, Partida partida) {
 		this.nom = nom;
 		this.color = color;
+		this.partida_id = partida;
 	}
 
 	public Long getIdJugador() {

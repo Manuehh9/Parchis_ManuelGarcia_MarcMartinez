@@ -40,6 +40,12 @@ public class HibernateUtil {
 
                 settings.put("hibernate.connection.serverTimezone", "UTC");
                 
+                settings.put("hibernate.connection.pool_size", 10);
+                
+                settings.put("hibernate.connection.shutdown", false);
+                
+                settings.put("hibernate.connection.release_mode", "auto");
+                
                 configuration.addAnnotatedClass(Casella.class);
                 configuration.addAnnotatedClass(Partida.class);
                 configuration.addAnnotatedClass(Fitxa.class);
@@ -57,5 +63,11 @@ public class HibernateUtil {
             }
         }
         return entityManagerFactory;
+    }
+    
+    public static void closeEntityManagerFactory() {
+        if (entityManagerFactory != null && entityManagerFactory.isOpen()) {
+            entityManagerFactory.close();
+        }
     }
 }

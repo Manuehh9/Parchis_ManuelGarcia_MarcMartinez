@@ -24,6 +24,8 @@ public class Fitxa {
     @ManyToOne
     @JoinColumn(name = "IdPartida")
     private Partida IdPartida;
+    
+    private boolean Movible;
 
 	public Fitxa(Long idFitxa, int posicion, boolean activa, Jugador jugador, Partida partida) {
 		super();
@@ -77,10 +79,19 @@ public class Fitxa {
 	public void setPartida(Partida partida) {
 		this.IdPartida = partida;
 	}
+	
+	
+
+	public boolean isMovible() {
+		return Movible;
+	}
+
+	public void setMovible(boolean movible) {
+		Movible = movible;
+	}
 
 	@Override
 	public String toString() {
-		return "Fitxa [IdFitxa=" + IdFitxa + ", posicio=" + posicio + ", activa=" + activa + ", IdJugador=" + IdJugador
-				+ ", IdPartida=" + IdPartida + "]";
+		return "Fitxa [posicio=" + posicio + ", activa=" + activa + ", Jugador=" + IdJugador + ", Movible=" + Movible + "]";
 	}
 }

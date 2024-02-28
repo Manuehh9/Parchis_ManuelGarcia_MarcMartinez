@@ -9,7 +9,6 @@ import hibernateConfiguration.HibernateUtil;
 public class Main {
 
 	public static void main(String[] args) {
-		boolean finalPartida = false, turno = true;
 		PartidaDAOImpl partidaDAOImpl = new PartidaDAOImpl();
 		
 		partidaDAOImpl.iniciarPartida();

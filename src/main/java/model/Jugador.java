@@ -105,7 +105,6 @@ public class Jugador {
 
 	@Override
 	public String toString() {
-		return "Jugador [IdJugador=" + IdJugador + ", nom=" + nom + ", color=" + color + ", victories=" + victories
-				+ ", partida_id=" + partida_id + ", partides=" + partides + ", fitxes=" + fitxes + "]";
+		return "Jugador [" +  "nom= " + nom + ", color= " + color + "]";
 	}
 }

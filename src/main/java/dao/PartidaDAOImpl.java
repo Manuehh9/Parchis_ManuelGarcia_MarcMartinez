@@ -20,8 +20,9 @@ public class PartidaDAOImpl implements PartidaDAO{
 	private List<Jugador> jugadores;
 	private EntityTransaction transaction;
 	private EntityManager entityManager;
-	private Long IdGanador;
+	private static String NomGanador;
 	private HibernateUtil hu = new HibernateUtil();
+	private final int FINAL_CASILLA = 68;
 
 	@Override
 	public void iniciarPartida() {
@@ -89,16 +90,57 @@ public class PartidaDAOImpl implements PartidaDAO{
 	    }
 	    
 	    do {
-			for(int i = 0; i < jugadores.size(); i++) {
-				int numFitxa = Turno(jugadores.get(i));
-				Fitxa f = jugadores.get(i).getFitxes().get(numFitxa);
-				moureFitxa(f, llancarDaus());
+	    	for (Jugador jugador : jugadores) {
+	            for (Fitxa fitxa : jugador.getFitxes()) {
+	                finalitzarRecorregut(fitxa, FINAL_CASILLA);
+	            }
+	        }
+	    	try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		} while (verificarVictoria());
+			for(int i = 0; i < jugadores.size(); i++) {
+				boolean turnos = true;
+				Fitxa f;
+				do {
+					int numFitxa = Turno(jugadores.get(i));
+					f = jugadores.get(i).getFitxes().get(numFitxa);
+					if(f.isMovible()) {
+						turnos = false;
+					}
+				} while (turnos);
+				if(!entradaAlTaulell(f) && f.isActiva() && f.isMovible()) {
+						moureFitxa(f, llancarDaus());
+						boolean comprobar = true;
+						do {
+							for (Jugador jugador : jugadores) {
+					            for (Fitxa fitxa : jugador.getFitxes()) {
+					                if(fitxa.getPosicion() == f.getPosicion() && !fitxa.getJugador().getColor().equals(f.getJugador().getColor())) {
+					                	if(fitxa.isActiva() && f.isActiva()) {
+					                		fitxa.setPosicion(0);
+					                		fitxa.setActiva(false);
+					                		fitxa.setMovible(false);
+					                		moureFitxa(fitxa, 20);
+					                	}
+					                } else {
+					                	comprobar = false;
+					                }
+					            }
+					        }
+						} while (comprobar);	
+				}
+				for (Jugador jugador : jugadores) {
+		            for (Fitxa fitxa : jugador.getFitxes()) {
+		                System.out.println(fitxa);
+		            }
+		        }
+				System.out.println("------------------------------------------------------------------------------------------------------------------");
+			}
+		} while (!verificarVictoria());
 	    
-	    System.out.println("Guanyador: " + IdGanador);
-	    
-	    hu.closeEntityManagerFactory();
+	    System.out.println("Guanyador: " + NomGanador);	    
 	}
  
 
@@ -152,6 +194,7 @@ public class PartidaDAOImpl implements PartidaDAO{
 	            fitxa.setActiva(false); // La ficha está inactiva al inicio del juego
 	            fitxa.setJugador(jugador); // Asignar el jugador a la ficha
 	            fitxa.setPartida(partida); // Asignar la partida a la ficha
+	            fitxa.setMovible(true);
 	            fichas.add(fitxa);
 	        }
 	        jugador.setFitxes(fichas); // Asignar las fichas al jugador
@@ -182,8 +225,10 @@ public class PartidaDAOImpl implements PartidaDAO{
 
 	@Override
 	public void moureFitxa(Fitxa fitxa, int quantitat) {
-		if(fitxa.isActiva()) {
+		if(fitxa.isActiva() && fitxa.getPosicion() + quantitat <= FINAL_CASILLA) {
 			fitxa.setPosicion(fitxa.getPosicion() + quantitat);
+		} else {
+			fitxa.setPosicion(FINAL_CASILLA);
 		}
 		
 	}
@@ -220,6 +265,7 @@ public class PartidaDAOImpl implements PartidaDAO{
 	public boolean finalitzarRecorregut(Fitxa fitxa, int quantitat) {
 		boolean comprobar = false;
 		if(fitxa.getPosicion() == quantitat) {
+			fitxa.setMovible(false);
 			comprobar = true;
 		}
 		return comprobar;
@@ -227,13 +273,13 @@ public class PartidaDAOImpl implements PartidaDAO{
 
 	@Override
 	public boolean verificarVictoria() {
-	    int finalCasilla = 68;
+	    
 	    for (Jugador j : jugadores) {
-	        if (finalitzarRecorregut(j.getFitxes().get(0), finalCasilla) &&
-	            finalitzarRecorregut(j.getFitxes().get(1), finalCasilla) &&
-	            finalitzarRecorregut(j.getFitxes().get(2), finalCasilla) &&
-	            finalitzarRecorregut(j.getFitxes().get(3), finalCasilla)) {
-	            IdGanador = j.getIdJugador();
+	        if (finalitzarRecorregut(j.getFitxes().get(0), FINAL_CASILLA) &&
+	            finalitzarRecorregut(j.getFitxes().get(1), FINAL_CASILLA) &&
+	            finalitzarRecorregut(j.getFitxes().get(2), FINAL_CASILLA) &&
+	            finalitzarRecorregut(j.getFitxes().get(3), FINAL_CASILLA)) {
+	            NomGanador = j.getNom();
 	            return true;
 	        }
 	    }
@@ -241,13 +287,13 @@ public class PartidaDAOImpl implements PartidaDAO{
 	}
 	public int Turno(Jugador jugador) {
 		Random rand = new Random();
-		int fitxa = rand.nextInt(3);
+		int fitxa = rand.nextInt(4);
 		return fitxa;
 	}
 
 
-	public Long getIdGanador() {
-		return IdGanador;
+	public String getNomGanador() {
+		return NomGanador;
 	}
 	
 	

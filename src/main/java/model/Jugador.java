@@ -3,44 +3,58 @@ package model;
 import java.util.List;
 
 import javax.persistence.*;
-
 @Entity
 public class Jugador {
 
-	@Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "IdJugador")
-    private Long idJugador;
-	
-	@Column(name = "Nom")
+    private Long IdJugador;
+
+    @Column(name = "nom")
     private String nom;
 
-    @Column(name = "Color")
+    @Column(name = "color")
     private String color;
 
-    @Column(name = "Victories")
+    @Column(name = "victories")
     private int victories;
+
+    @ManyToOne
+    @JoinColumn(name = "partida_id")
+    private Partida partida_id;
     
-    @OneToMany(mappedBy = "jugador")
+    @OneToMany(mappedBy = "IdPartida")
     private List<Partida> partides;
-    
-    @OneToMany(mappedBy = "jugador")
+
+    @OneToMany(mappedBy = "IdFitxa")
     private List<Fitxa> fitxes;
 
-	public Jugador(String nom, String color, int victories, List<Partida> partides,
+	public Jugador(String nom, String color, int victories, Partida partida, List<Partida> partides,
 			List<Fitxa> fitxes) {
 		super();
 		this.nom = nom;
 		this.color = color;
 		this.victories = victories;
+		this.partida_id = partida;
 		this.partides = partides;
 		this.fitxes = fitxes;
 	}
 
-	public Long getIdJugador() {
-		return idJugador;
+	public Jugador(String nom, String color, Partida partida) {
+		this.nom = nom;
+		this.color = color;
+		this.partida_id = partida;
 	}
-	
+
+	public Long getIdJugador() {
+		return IdJugador;
+	}
+
+	public void setIdJugador(Long jugador_id) {
+		this.IdJugador = jugador_id;
+	}
+
 	public String getNom() {
 		return nom;
 	}
@@ -65,6 +79,14 @@ public class Jugador {
 		this.victories = victories;
 	}
 
+	public Partida getPartida() {
+		return partida_id;
+	}
+
+	public void setPartida(Partida partida) {
+		this.partida_id = partida;
+	}
+
 	public List<Partida> getPartides() {
 		return partides;
 	}
@@ -83,7 +105,6 @@ public class Jugador {
 
 	@Override
 	public String toString() {
-		return "Jugadors [idJugador=" + idJugador + ", nom=" + nom + ", color=" + color + ", victories=" + victories
-				+ ", partides=" + partides + ", fitxes=" + fitxes + "]";
+		return "Jugador [" +  "nom= " + nom + ", color= " + color + "]";
 	}
 }
